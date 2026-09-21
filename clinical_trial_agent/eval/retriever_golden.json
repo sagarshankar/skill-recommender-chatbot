@@ -1,0 +1,119 @@
+[
+  {
+    "input": "A participant weighing 35 kg was enrolled in the sutimlimab study",
+    "expected_output": "This violates inclusion criterion I08 which requires body weight of at least 39 kg at screening/baseline.",
+    "category": "baseline",
+    "description": "Clear single-section retrieval: weight minimum from inclusion criteria"
+  },
+  {
+    "input": "A participant who was diagnosed with systemic lupus erythematosus was enrolled in the study",
+    "expected_output": "This violates exclusion criterion E01 which excludes participants with clinical diagnosis of systemic lupus erythematosus (SLE) or immune complex mediated autoimmune disorders.",
+    "category": "baseline",
+    "description": "Clear single-section retrieval: SLE exclusion"
+  },
+  {
+    "input": "Sutimlimab was administered at a dose of 7.5 g to a participant weighing 60 kg",
+    "expected_output": "This is a dosing deviation. Per protocol, participants whose weight is >= 39 kg to < 75 kg should receive 6.5 g of sutimlimab. A 60 kg participant should have received 6.5 g, not 7.5 g. The 7.5 g dose is reserved for participants weighing 75 kg or more.",
+    "category": "baseline",
+    "description": "Clear single-section retrieval: weight-based dosing tiers"
+  },
+  {
+    "input": "A pregnant participant was enrolled in the sutimlimab study",
+    "expected_output": "This violates exclusion criterion E03b which excludes participants with pregnancy or breast-feeding.",
+    "category": "baseline",
+    "description": "Clear single-section retrieval: pregnancy exclusion"
+  },
+  {
+    "input": "Informed consent was obtained from the participant after the first dose of sutimlimab was administered on Day 0",
+    "expected_output": "This violates the protocol requirements. Per the Schedule of Activities, written informed consent must be obtained at the Screening/Baseline visit before any study procedures. Adverse events are recorded from the time the participant provides signed informed consent.",
+    "category": "baseline",
+    "description": "Clear single-section retrieval: informed consent timing in Schedule of Activities"
+  },
+
+  {
+    "input": "A participant weighing exactly 75 kg received the 6.5 g dose of sutimlimab",
+    "expected_output": "This is a dosing deviation at the weight boundary. Per protocol, the 6.5 g dose is for participants whose weight is >= 39 kg to < 75 kg, and the 7.5 g dose is for participants >= 75 kg. A participant weighing exactly 75 kg should receive 7.5 g, not 6.5 g.",
+    "category": "edge_case",
+    "description": "Boundary condition: weight exactly at 75 kg dose tier threshold"
+  },
+  {
+    "input": "A participant received Rituximab combination therapy with bendamustine 4 months before being enrolled in the study",
+    "expected_output": "This violates exclusion criterion E02b which excludes participants who have received Rituximab combination therapies (e.g., with bendamustine, fludarabine, ibrutinib, or cytotoxic drugs) within prior 6 months. Four months is within the 6-month exclusion window for combination therapies.",
+    "category": "edge_case",
+    "description": "Edge case: Rituximab COMBINATION therapy has 6-month window (not 3-month like monotherapy)"
+  },
+  {
+    "input": "The sutimlimab infusion was administered over 25 minutes to a participant without underlying cardiopulmonary disease",
+    "expected_output": "This is a protocol deviation. Sutimlimab is administered via IV infusion over approximately 60 plus or minus 5 minutes. An infusion of less than 30 minutes is considered less than half the recommended duration and constitutes an overdose per the AESI definition. The 2-hour infusion option is only available for participants with underlying cardiopulmonary disease with Sponsor approval.",
+    "category": "edge_case",
+    "description": "Edge case: infusion duration boundary — < 30 min triggers overdose AESI definition"
+  },
+  {
+    "input": "The participant missed a scheduled dose and it has been exactly 16 days since their last sutimlimab infusion. The site resumed bi-weekly dosing without a loading dose.",
+    "expected_output": "This is within the acceptable window. Per protocol, participants who miss a dose outside the dosing window or more than 17 days since last dose must receive a loading dose. At 16 days, this does not exceed the 17-day threshold, so resuming bi-weekly dosing without a loading dose is appropriate.",
+    "category": "edge_case",
+    "description": "Edge case: near-miss boundary at 16 days (just under >17 day missed dose threshold)"
+  },
+  {
+    "input": "A participant whose End of Study visit in CADENZA took place 2.5 months before their baseline visit in this study was enrolled",
+    "expected_output": "This is within the acceptable window. Exclusion criterion E04 excludes participants whose End of Study visit in CARDINAL or CADENZA took place more than 3 months before baseline visit in this study. At 2.5 months, the participant is within the 3-month window and is eligible.",
+    "category": "edge_case",
+    "description": "Edge case: near-miss boundary for 3-month gap between prior study completion and enrollment"
+  },
+
+  {
+    "input": "A female participant became pregnant during the treatment period and continued to receive sutimlimab for 3 more weeks before the pregnancy was discovered",
+    "expected_output": "This involves multiple protocol violations across sections. Per exclusion criterion E03b, pregnancy is excluded. Per Section 7.2, occurrence of pregnancy requires discontinuation from the study. Per Section 8.3.5, pregnancy is considered an AESI and must be reported to the Sponsor within 24 hours. Per Section 8.3.5, any female participant who becomes pregnant while participating will discontinue study intervention or be withdrawn. The participant should have been immediately withdrawn upon discovery.",
+    "category": "cross_section",
+    "description": "Cross-section: pregnancy during study requires retrieval from exclusion criteria (E03b), discontinuation rules (7.2), and adverse event reporting (8.3.5)"
+  },
+  {
+    "input": "A participant was simultaneously enrolled in another investigational drug trial while receiving sutimlimab in this study",
+    "expected_output": "This violates multiple protocol sections. Per Section 6.8, participants will refrain from participation in any other investigational study drug trial in which receipt of any investigational drug occurred within 5 half-lives or 30 days, whichever is longer, prior to Day 0 and during the entire study. Per Section 7.2, enrollment in another clinical study is listed as a criterion for participant discontinuation/withdrawal.",
+    "category": "cross_section",
+    "description": "Cross-section: dual enrollment requires retrieval from concomitant therapy (6.8) and discontinuation criteria (7.2)"
+  },
+  {
+    "input": "The participant experienced a serious adverse event but the investigator did not report it to the Sponsor until 5 days later",
+    "expected_output": "This violates the SAE reporting requirements. Per Section 8.3.1, SAEs must be reported to the Sponsor promptly. Per Section 8.3.4, prompt notification by the Investigator to the Sponsor of an SAE is essential for legal obligations and ethical responsibilities. The Investigator will submit any updated SAE data to the Sponsor within 24 hours of it being available. A 5-day delay is a significant reporting deviation.",
+    "category": "cross_section",
+    "description": "Cross-section: SAE reporting timeline requires retrieval from multiple safety reporting subsections (8.3.1, 8.3.4)"
+  },
+  {
+    "input": "A participant received Rituximab monotherapy during the treatment period of the study while continuing sutimlimab",
+    "expected_output": "This violates multiple protocol sections. Per Section 6.8, treatment with rituximab monotherapy or rituximab combination therapies is prohibited as concomitant therapy during the study. Per exclusion criterion E02, prior Rituximab use is also an exclusion criterion. This constitutes both a prohibited concomitant medication deviation and potentially grounds for study withdrawal per Section 7.2 (intake of non-permitted concomitant medication).",
+    "category": "cross_section",
+    "description": "Cross-section: Rituximab during study requires retrieval from concomitant therapy prohibition (6.8), exclusion criteria (E02), and withdrawal criteria (7.2)"
+  },
+  {
+    "input": "The investigator administered an overdose of sutimlimab but did not contact the Sponsor immediately and did not report it as an AESI",
+    "expected_output": "This violates multiple protocol sections. Per Section 6.7, in the event of an overdose the Investigator should contact the Sponsor immediately and document appropriately in the CRF and report and submit as AESI. Per Section 8.3.6, an overdose is defined as an AESI when the study drug is administered at a dose significantly greater than scheduled or in less than half the recommended duration (less than 30 minutes) and results in clinical signs or symptoms. Failure to contact the Sponsor and failure to report as AESI are separate protocol deviations.",
+    "category": "cross_section",
+    "description": "Cross-section: overdose handling requires retrieval from treatment of overdose (6.7) and AESI definition (8.3.6)"
+  },
+
+  {
+    "input": "An 80 kg participant received 7.5 g of sutimlimab. Was the dose correct?",
+    "expected_output": "Yes, the dose was correct. Per protocol, participants whose weight is 75 kg or more should receive 7.5 g of sutimlimab. An 80 kg participant falls in the >= 75 kg tier and 7.5 g is the appropriate dose.",
+    "category": "implicit_constraint",
+    "description": "Implicit constraint: user asks if dose was correct without stating the dosing rule — retriever must find weight-based dosing tiers"
+  },
+  {
+    "input": "A participant's last infusion was 15 days ago and they just showed up for their next dose. Is that fine?",
+    "expected_output": "Yes, this is acceptable. Per protocol, participants who miss a dose outside the dosing window or more than 17 days since last dose must receive a loading dose. At 15 days, this does not exceed the 17-day threshold, so resuming the regular bi-weekly dosing schedule without a loading dose is appropriate.",
+    "category": "implicit_constraint",
+    "description": "Implicit constraint: user asks about dosing gap timing without mentioning the missed dose rule — retriever must find the >17 day threshold"
+  },
+  {
+    "input": "Can a participant who finished the CADENZA study 4 months ago still join this study?",
+    "expected_output": "No, this participant is not eligible. Per exclusion criterion E04, participants whose End of Study visit in CARDINAL or CADENZA took place more than 3 months before the baseline visit in this study are excluded. At 4 months, the participant exceeds the 3-month window and is ineligible.",
+    "category": "implicit_constraint",
+    "description": "Implicit constraint: user asks about eligibility without citing E04 — retriever must find the 3-month prior study window"
+  },
+  {
+    "input": "The participant had a meningococcal infection 2 months ago. Are they eligible for the study?",
+    "expected_output": "This may violate eligibility requirements. Per inclusion criterion I06, participants must have received meningococcal vaccination and may require a waiting period after vaccination or infection per protocol safety requirements. Additionally, a recent serious infection involving encapsulated bacteria like Neisseria meningitidis raises safety concerns given sutimlimab's mechanism as a complement inhibitor. The participant's eligibility should be carefully evaluated against the infection history requirements.",
+    "category": "implicit_constraint",
+    "description": "Implicit constraint: user asks about eligibility with recent infection without citing specific criteria — retriever must find meningococcal vaccination requirements (I06) and infection risk sections"
+  }
+]
